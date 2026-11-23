@@ -25,13 +25,12 @@
 - [快速开始](#快速开始)
 - [使用](#使用)
 - [配置](#配置)
-- [验证与质量](#验证与质量)
 - [错误码](#错误码)
 - [可观测性插件](#可观测性插件)
 - [扩展指南](#扩展指南)
 - [已知局限](#已知局限)
 - [文档](#文档)
-- [License](#license)
+- [验证与质量](#验证与质量)
 
 ## 为什么需要它
 
@@ -295,23 +294,6 @@ bash scripts/demo_curl.sh
 
 `capabilities.native_json_object / native_json_schema` 只决定结构化输出走原生字段还是"提示词注入 + 本地校验"；`stream=false` / `structured_output=false` 会触发 `unsupported_capability`。
 
-## 验证与质量
-
-```bash
-python -m pytest                          # 单元测试：40 项
-python scripts/verify_all.py --no-live    # 本地 mock：91 项，不需要真实 Key
-python scripts/verify_all.py              # 全量：92 项，含真实 live 冒烟
-python scripts/verify_all.py --upto M4    # 按里程碑
-python scripts/verify_all.py --only V-STREAM,V-ADP   # 按编号前缀过滤
-```
-
-验证脚本在同一进程内以真实 socket 启动 mock 上游与网关，注入假时钟 / 假 sleep / 固定随机源，因此退避序列可断言且整套退避检查真实耗时 < 5s。
-
-- 输出：控制台表格 + [`verification_report.md`](verification_report.md) + [`verification_report.json`](verification_report.json)，每个 `V-编号` 一行并附关键数字证据
-- 报告末尾给出"六大能力验收汇总"，全部 PASS 才标 OK
-- 完整性自检：解析 `docs/blueprint/04-verification-plan.md` 的编号集合，与脚本注册的检查集合比对，缺项/多项都算 FAIL
-- 任一 FAIL → 退出码 1，可直接接入 CI
-
 ## 错误码
 
 统一信封：
@@ -404,3 +386,30 @@ python scripts/verify_all.py --only V-STREAM,V-ADP   # 按编号前缀过滤
 | [`docs/blueprint/04-verification-plan.md`](docs/blueprint/04-verification-plan.md) | 验证计划（编号即契约） |
 | [`docs/blueprint/05-decisions.md`](docs/blueprint/05-decisions.md) | 假设与决策记录 |
 | [`docs/review-log.md`](docs/review-log.md) | 里程碑记录与回归审视 |
+
+## 验证与质量
+
+### 验证 OK
+
+![全量测试 verify_all 结果](docs/images/test_ok.png)
+
+`python scripts/verify_all.py` 全量 92 项全部通过（`PASS=92 FAIL=0 DEFERRED=0 SKIP=0`），「六大能力验收汇总」全部 OK；`python -m pytest` 40 项单元测试通过。
+
+### 运行方式
+
+```bash
+python -m pytest                          # 单元测试：40 项
+python scripts/verify_all.py --no-live    # 本地 mock：91 项，不需要真实 Key
+python scripts/verify_all.py              # 全量：92 项，含真实 live 冒烟
+python scripts/verify_all.py --upto M4    # 按里程碑
+python scripts/verify_all.py --only V-STREAM,V-ADP   # 按编号前缀过滤
+```
+
+### 验证机制
+
+验证脚本在同一进程内以真实 socket 启动 mock 上游与网关，注入假时钟 / 假 sleep / 固定随机源，因此退避序列可断言且整套退避检查真实耗时 < 5s。
+
+- 输出：控制台表格 + [`verification_report.md`](verification_report.md) + [`verification_report.json`](verification_report.json)，每个 `V-编号` 一行并附关键数字证据
+- 报告末尾给出"六大能力验收汇总"，全部 PASS 才标 OK
+- 完整性自检：解析 `docs/blueprint/04-verification-plan.md` 的编号集合，与脚本注册的检查集合比对，缺项/多项都算 FAIL
+- 任一 FAIL → 退出码 1，可直接接入 CI
