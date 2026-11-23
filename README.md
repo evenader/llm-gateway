@@ -116,6 +116,13 @@ source .venv/bin/activate
 pip install -e ".[dev]"
 ```
 
+> **终端约定**：下文命令里的 `python` 均指"已激活虚拟环境后的解释器"。不想激活、或 PowerShell 执行策略受限时，可统一换成解释器全路径：
+>
+> - Windows：`.\.venv\Scripts\python.exe`
+> - macOS / Linux：`.venv/bin/python`
+>
+> 例如 `python scripts\verify_all.py` 等价于 `.\.venv\Scripts\python.exe scripts\verify_all.py`。若看到 `ModuleNotFoundError: No module named 'httpx'`，说明用了全局 Python（venv 未激活），换成全路径形式重跑即可。
+
 > **Windows / PowerShell 说明**：下文 `export X=Y` 需写成 `$env:X="Y"`；`curl` 请显式使用 `curl.exe`（PowerShell 中 `curl` 是 `Invoke-WebRequest` 别名），且内联 JSON（尤其含空格或嵌套对象时）的引号解析不可靠——把请求体写入文件后用 `curl.exe ... --data-binary "@body.json"` 最稳妥，或直接在 Git Bash / WSL 中执行下述 bash 示例。
 
 ### 3 分钟跑通（本地 mock，无需真实 Key）
