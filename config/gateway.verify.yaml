@@ -1,0 +1,96 @@
+# 验证配置：base_url 与存储路径占位由 scripts/verify_all.py 替换后加载。
+# 上游 Key 使用验证专用环境变量 VERIFY_UPSTREAM_KEY（脚本注入哨兵值），与真实 DEEPSEEK_API_KEY 隔离。
+server: {host: 127.0.0.1, port: 0}
+auth: {enabled: false, keys_env: GATEWAY_API_KEYS}
+retry: {max_retries: 3, base_delay_s: 0.5, factor: 2.0, max_delay_s: 8.0, jitter: none}
+stream: {heartbeat_interval_s: 0.3}
+structured: {max_repairs: 2}
+defaults:
+  timeout: {connect_s: 1, read_s: 5, total_s: 10}
+  rate_limit: {rate_per_s: 1000, burst: 1000}
+observability: {enabled: true, db_path: __TMP__/observability.db, queue_size: 10000}
+prompts: {db_path: __TMP__/prompts.db, seed_dir: config/prompts}
+models:
+  deepseek-v4-pro:
+    protocol: openai_responses
+    base_url: __MOCK_BASE__
+    endpoint_path: /responses
+    api_key_env: VERIFY_UPSTREAM_KEY
+    upstream_model: deepseek-v4-pro
+    rate_limit: {rate_per_s: 1000, burst: 1000}
+    capabilities: {stream: true, native_json_object: true, native_json_schema: true}
+    thinking: disabled
+  deepseek-v4-flash:
+    protocol: anthropic_messages
+    base_url: __MOCK_BASE__/anthropic
+    endpoint_path: /v1/messages
+    api_key_env: VERIFY_UPSTREAM_KEY
+    upstream_model: deepseek-v4-flash
+    default_max_tokens: 4096
+    rate_limit: {rate_per_s: 1000, burst: 1000}
+    capabilities: {stream: true, native_json_object: false, native_json_schema: false}
+    thinking: disabled
+  no-stream-pro:
+    protocol: openai_responses
+    base_url: __MOCK_BASE__
+    endpoint_path: /responses
+    api_key_env: VERIFY_UPSTREAM_KEY
+    upstream_model: deepseek-v4-pro
+    capabilities: {stream: false, native_json_object: true, native_json_schema: true}
+    thinking: disabled
+  tiny-budget-pro:
+    protocol: openai_responses
+    base_url: __MOCK_BASE__
+    endpoint_path: /responses
+    api_key_env: VERIFY_UPSTREAM_KEY
+    upstream_model: deepseek-v4-pro
+    timeout: {connect_s: 1, read_s: 5, total_s: 0.001}
+    capabilities: {stream: true, native_json_object: true, native_json_schema: true}
+    thinking: disabled
+  timeout-pro:
+    protocol: openai_responses
+    base_url: __MOCK_BASE__
+    endpoint_path: /responses
+    api_key_env: VERIFY_UPSTREAM_KEY
+    upstream_model: deepseek-v4-pro
+    timeout: {connect_s: 1, read_s: 0.2, total_s: 5}
+    capabilities: {stream: true, native_json_object: true, native_json_schema: true}
+    thinking: disabled
+  timeout-flash:
+    protocol: anthropic_messages
+    base_url: __MOCK_BASE__/anthropic
+    endpoint_path: /v1/messages
+    api_key_env: VERIFY_UPSTREAM_KEY
+    upstream_model: deepseek-v4-flash
+    default_max_tokens: 4096
+    timeout: {connect_s: 1, read_s: 0.2, total_s: 5}
+    capabilities: {stream: true, native_json_object: false, native_json_schema: false}
+    thinking: disabled
+  rl-alpha:
+    protocol: openai_responses
+    base_url: __MOCK_BASE__
+    endpoint_path: /responses
+    api_key_env: VERIFY_UPSTREAM_KEY
+    upstream_model: deepseek-v4-pro
+    rate_limit: {rate_per_s: 1, burst: 3}
+    capabilities: {stream: true, native_json_object: true, native_json_schema: true}
+    thinking: disabled
+  rl-beta:
+    protocol: anthropic_messages
+    base_url: __MOCK_BASE__/anthropic
+    endpoint_path: /v1/messages
+    api_key_env: VERIFY_UPSTREAM_KEY
+    upstream_model: deepseek-v4-flash
+    default_max_tokens: 4096
+    rate_limit: {rate_per_s: 1, burst: 3}
+    capabilities: {stream: true, native_json_object: false, native_json_schema: false}
+    thinking: disabled
+  rl-big:
+    protocol: openai_responses
+    base_url: __MOCK_BASE__
+    endpoint_path: /responses
+    api_key_env: VERIFY_UPSTREAM_KEY
+    upstream_model: deepseek-v4-pro
+    rate_limit: {rate_per_s: 0.001, burst: 50}
+    capabilities: {stream: true, native_json_object: true, native_json_schema: true}
+    thinking: disabled

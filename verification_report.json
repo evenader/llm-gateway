@@ -1,0 +1,1408 @@
+{
+  "command": "scripts\\verify_all.py --verbose",
+  "completeness_issues": [],
+  "summary": {
+    "两个模型调用": "OK",
+    "流式输出": "OK",
+    "结构化输出": "OK",
+    "提示词模板与版本": "OK",
+    "可观测数据": "OK",
+    "重试与限流": "OK"
+  },
+  "results": [
+    {
+      "id": "V-ADP-01",
+      "milestone": "M2",
+      "description": "pro 上游请求契约",
+      "status": "PASS",
+      "evidence": {
+        "authorization": "Bearer <key>",
+        "fields": [
+          "input",
+          "instructions",
+          "max_output_tokens",
+          "model",
+          "reasoning",
+          "stream"
+        ],
+        "instructions": "S1"
+      },
+      "duration_ms": 234.4
+    },
+    {
+      "id": "V-ADP-02",
+      "milestone": "M2",
+      "description": "flash 上游请求契约",
+      "status": "PASS",
+      "evidence": {
+        "x-api-key": "present",
+        "system": "S1",
+        "max_tokens": 128
+      },
+      "duration_ms": 20.1
+    },
+    {
+      "id": "V-ADP-03",
+      "milestone": "M2",
+      "description": "system 合并与相邻同角色合并",
+      "status": "PASS",
+      "evidence": {
+        "pro_instructions": "A\\nB",
+        "flash_system": "A\\nB",
+        "flash_user": "U1\\n\\nU2"
+      },
+      "duration_ms": 23.8
+    },
+    {
+      "id": "V-ADP-04",
+      "milestone": "M2",
+      "description": "finish_reason 归一（stop/length/content_filter）",
+      "status": "PASS",
+      "evidence": {
+        "stop": {
+          "pro": "stop",
+          "flash": "stop"
+        },
+        "length": {
+          "pro": "length",
+          "flash": "length"
+        },
+        "content_filter": {
+          "pro": "content_filter",
+          "flash": "content_filter"
+        }
+      },
+      "duration_ms": 46.3
+    },
+    {
+      "id": "V-ADP-05",
+      "milestone": "M2",
+      "description": "Usage 归一（Responses 与 Anthropic）",
+      "status": "PASS",
+      "evidence": {
+        "pro": {
+          "prompt_tokens": 100,
+          "completion_tokens": 50,
+          "total_tokens": 150,
+          "prompt_tokens_details": {
+            "cached_tokens": 30
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 20
+          }
+        },
+        "flash": {
+          "prompt_tokens": 100,
+          "completion_tokens": 50,
+          "total_tokens": 150,
+          "prompt_tokens_details": {
+            "cached_tokens": 30
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": null
+          }
+        }
+      },
+      "duration_ms": 16.9
+    },
+    {
+      "id": "V-ADP-06",
+      "milestone": "M2",
+      "description": "上游缺 usage → 字段 null",
+      "status": "PASS",
+      "evidence": {
+        "pro": {
+          "prompt_tokens": null,
+          "completion_tokens": null,
+          "total_tokens": null,
+          "prompt_tokens_details": {
+            "cached_tokens": null
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": null
+          }
+        },
+        "flash": {
+          "prompt_tokens": null,
+          "completion_tokens": null,
+          "total_tokens": null,
+          "prompt_tokens_details": {
+            "cached_tokens": null
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": null
+          }
+        },
+        "trace_usage_missing": true
+      },
+      "duration_ms": 127.0
+    },
+    {
+      "id": "V-ADP-07",
+      "milestone": "M8",
+      "description": "哨兵 Key 不出现在响应/头/日志/trace",
+      "status": "PASS",
+      "evidence": {
+        "captured_responses": 404,
+        "leaks": 0
+      },
+      "duration_ms": 6.3
+    },
+    {
+      "id": "V-ADP-08",
+      "milestone": "M8",
+      "description": "live 冒烟：两模型各一次非流式 + 流式",
+      "status": "PASS",
+      "evidence": {
+        "models": {
+          "deepseek-v4-pro": {
+            "nonstream_total_tokens": 18,
+            "stream_total_tokens": 37,
+            "nonstream_chars": 33,
+            "stream_chars": 117
+          },
+          "deepseek-v4-flash": {
+            "nonstream_total_tokens": 20,
+            "stream_total_tokens": 20,
+            "nonstream_chars": 40,
+            "stream_chars": 40
+          }
+        },
+        "subchecks": [
+          {
+            "name": "deepseek-v4-pro 非流式",
+            "status": "OK",
+            "detail": "total_tokens=18"
+          },
+          {
+            "name": "deepseek-v4-pro 流式",
+            "status": "OK",
+            "detail": "total_tokens=37"
+          },
+          {
+            "name": "deepseek-v4-flash 非流式",
+            "status": "OK",
+            "detail": "total_tokens=20"
+          },
+          {
+            "name": "deepseek-v4-flash 流式",
+            "status": "OK",
+            "detail": "total_tokens=20"
+          }
+        ]
+      },
+      "duration_ms": 3743.9
+    },
+    {
+      "id": "V-ERR-01",
+      "milestone": "M2",
+      "description": "错误映射表驱动（两协议）",
+      "status": "PASS",
+      "evidence": {
+        "responses_http": "ok",
+        "anthropic_http": "ok",
+        "responses_body": "ok",
+        "anthropic_body": "ok",
+        "responses_timeout": "ok",
+        "anthropic_timeout": "ok",
+        "connection_reset_calls": 4
+      },
+      "duration_ms": 2267.7
+    },
+    {
+      "id": "V-ERR-02",
+      "milestone": "M1",
+      "description": "错误信封字段齐全且 X-Request-ID 一致",
+      "status": "PASS",
+      "evidence": {
+        "fields": [
+          "code",
+          "details",
+          "message",
+          "request_id",
+          "retryable",
+          "stage",
+          "type"
+        ],
+        "request_id": "a8791d1341614c06a5b65f69ecb2a5dc"
+      },
+      "duration_ms": 7.4
+    },
+    {
+      "id": "V-ERR-03",
+      "milestone": "M2",
+      "description": "不泄露 Key/鉴权头/上游全文（摘要 ≤300）",
+      "status": "PASS",
+      "evidence": {
+        "message_length": 61,
+        "contains_key": false
+      },
+      "duration_ms": 20.3
+    },
+    {
+      "id": "V-ERR-04",
+      "milestone": "M1",
+      "description": "请求级校验错误 422/400，零上游",
+      "status": "PASS",
+      "evidence": {
+        "missing_model": {
+          "http": 422,
+          "code": "invalid_request"
+        },
+        "empty_messages": {
+          "http": 422,
+          "code": "invalid_request"
+        },
+        "temperature": {
+          "http": 422,
+          "code": "invalid_request"
+        },
+        "unknown_field": {
+          "http": 422,
+          "code": "invalid_request"
+        }
+      },
+      "duration_ms": 30.4
+    },
+    {
+      "id": "V-ERR-05",
+      "milestone": "M1",
+      "description": "适配器未预期异常 → 500 internal_error，信封一致",
+      "status": "PASS",
+      "evidence": {
+        "status": 500,
+        "code": "internal_error",
+        "request_id": "05e23cfb1ac443aaa57c70f63f140455"
+      },
+      "duration_ms": 145.1
+    },
+    {
+      "id": "V-ERR-06",
+      "milestone": "M2",
+      "description": "200 非 JSON/缺字段/空文本分别映射",
+      "status": "PASS",
+      "evidence": {
+        "deepseek-v4-pro:non_json": "upstream_protocol_error",
+        "deepseek-v4-pro:missing_output": "upstream_protocol_error",
+        "deepseek-v4-pro:empty_text": "upstream_empty_response",
+        "deepseek-v4-flash:non_json": "upstream_protocol_error",
+        "deepseek-v4-flash:missing_output": "upstream_protocol_error",
+        "deepseek-v4-flash:empty_text": "upstream_empty_response"
+      },
+      "duration_ms": 66.4
+    },
+    {
+      "id": "V-ERR-07",
+      "milestone": "M3",
+      "description": "上游 429 → 503 upstream_rate_limited；网关限流才是 429",
+      "status": "PASS",
+      "evidence": {
+        "upstream": {
+          "http": 503,
+          "code": "upstream_rate_limited"
+        },
+        "gateway": {
+          "http": 429,
+          "code": "rate_limit_exceeded"
+        }
+      },
+      "duration_ms": 49.4
+    },
+    {
+      "id": "V-OBS-01",
+      "milestone": "M7",
+      "description": "成功/失败/拒绝/取消各恰一条 trace",
+      "status": "PASS",
+      "evidence": {
+        "completed": "dde0711f00024f2ebbe95f02d24c7434",
+        "failed": "cce407f1d05a458793edc06b916fdcc9",
+        "rejected": "c4e9c8bb10b54c20b4a4c460e852b51f",
+        "cancelled": "99075253f7ef4b149e6f82e195c54995"
+      },
+      "duration_ms": 837.9
+    },
+    {
+      "id": "V-OBS-02",
+      "milestone": "M7",
+      "description": "Token 分类（两协议）",
+      "status": "PASS",
+      "evidence": {
+        "pro": {
+          "input_tokens": 100,
+          "output_tokens": 50,
+          "cache_read_tokens": 30,
+          "reasoning_tokens": 20,
+          "total_tokens": 150
+        },
+        "flash": {
+          "input_tokens": 100,
+          "output_tokens": 50,
+          "cache_read_tokens": 30,
+          "cache_creation_tokens": 0,
+          "total_tokens": 150
+        }
+      },
+      "duration_ms": 71.9
+    },
+    {
+      "id": "V-OBS-03",
+      "milestone": "M7",
+      "description": "延迟拆分：非流式 total≥400、ttft=null；流式 ttft<total",
+      "status": "PASS",
+      "evidence": {
+        "non_stream": {
+          "total_ms": 407.7
+        },
+        "stream": {
+          "ttft_ms": 334.7,
+          "total_ms": 335.2,
+          "generation_ms": 0.5
+        }
+      },
+      "duration_ms": 939.8
+    },
+    {
+      "id": "V-OBS-04",
+      "milestone": "M7",
+      "description": "重试被记录：attempts 长度与退避总和",
+      "status": "PASS",
+      "evidence": {
+        "retry_count": 2,
+        "attempts": 3,
+        "retry_wait_ms": 1500.0,
+        "sleeps": [
+          0.5,
+          1.0
+        ]
+      },
+      "duration_ms": 42.2
+    },
+    {
+      "id": "V-OBS-05",
+      "milestone": "M7",
+      "description": "失败与拒绝 trace 的 error_code/stage 与响应一致",
+      "status": "PASS",
+      "evidence": {
+        "failed": {
+          "code": "upstream_server_error",
+          "stage": "upstream_http"
+        },
+        "rejected": {
+          "status": "rejected",
+          "code": "rate_limit_exceeded"
+        }
+      },
+      "duration_ms": 261.8
+    },
+    {
+      "id": "V-OBS-06",
+      "milestone": "M7",
+      "description": "trace 记录逻辑模型、上游模型、协议、模板名与版本",
+      "status": "PASS",
+      "evidence": {
+        "logical_model": "deepseek-v4-flash",
+        "upstream_model": "deepseek-v4-flash",
+        "protocol": "anthropic_messages",
+        "prompt": {
+          "name": "code-review",
+          "version": "1.1.0"
+        }
+      },
+      "duration_ms": 60.6
+    },
+    {
+      "id": "V-OBS-07",
+      "milestone": "M7",
+      "description": "traces 过滤/单条查询/stats 对账",
+      "status": "PASS",
+      "evidence": {
+        "traces": 84,
+        "flash_rows": 28,
+        "models": [
+          "deepseek-v4-flash",
+          "deepseek-v4-pro",
+          "missing-model",
+          "rl-alpha",
+          "timeout-flash",
+          "timeout-pro",
+          "unknown"
+        ]
+      },
+      "duration_ms": 150.0
+    },
+    {
+      "id": "V-OBS-08",
+      "milestone": "M7",
+      "description": "隐私：trace/日志无完整提示词、完整输出、哨兵 Key",
+      "status": "PASS",
+      "evidence": {
+        "trace_fields_only": true,
+        "prompt_chars": 35,
+        "fingerprint": "09a903cdd71452d5"
+      },
+      "duration_ms": 110.8
+    },
+    {
+      "id": "V-OBS-09",
+      "milestone": "M7",
+      "description": "解耦静态检查：业务层零 import observability",
+      "status": "PASS",
+      "evidence": {
+        "business_imports": 0,
+        "main_wires_plugin": true
+      },
+      "duration_ms": 26.7
+    },
+    {
+      "id": "V-OBS-10",
+      "milestone": "M7",
+      "description": "关闭插件：admin 404，核心链路仍可用",
+      "status": "PASS",
+      "evidence": {
+        "admin": 404,
+        "chat": 200,
+        "stream": "ok",
+        "render": 200
+      },
+      "duration_ms": 290.8
+    },
+    {
+      "id": "V-OBS-11",
+      "milestone": "M7",
+      "description": "故障隔离：订阅者异常/存储不可写/队列满",
+      "status": "PASS",
+      "evidence": {
+        "write_errors": 5,
+        "dropped": 4,
+        "subscriber_errors": 21,
+        "overhead_ms": 0.15
+      },
+      "duration_ms": 786.9
+    },
+    {
+      "id": "V-OBS-12",
+      "milestone": "M7",
+      "description": "重启后历史 trace 仍可查",
+      "status": "PASS",
+      "evidence": {
+        "history_rows": 5,
+        "single_query": 200
+      },
+      "duration_ms": 324.6
+    },
+    {
+      "id": "V-RETRY-01",
+      "milestone": "M3",
+      "description": "持续 503 → 4 次调用、3 次退避、最终 503",
+      "status": "PASS",
+      "evidence": {
+        "calls": 4,
+        "sleeps": [
+          0.5,
+          1.0,
+          2.0
+        ],
+        "code": "upstream_overloaded"
+      },
+      "duration_ms": 39.4
+    },
+    {
+      "id": "V-RETRY-02",
+      "milestone": "M3",
+      "description": "指数退避序列与 full jitter 范围",
+      "status": "PASS",
+      "evidence": {
+        "no_jitter": [
+          0.5,
+          1.0,
+          2.0
+        ],
+        "full_jitter": [
+          0.16191638241658118,
+          0.15084917392450192,
+          1.3018689460797075
+        ]
+      },
+      "duration_ms": 3.1
+    },
+    {
+      "id": "V-RETRY-03",
+      "milestone": "M3",
+      "description": "max_delay 封顶 [3,8,8]",
+      "status": "PASS",
+      "evidence": {
+        "sleeps": [
+          3.0,
+          8.0,
+          8.0
+        ]
+      },
+      "duration_ms": 3.4
+    },
+    {
+      "id": "V-RETRY-04",
+      "milestone": "M3",
+      "description": "不可重试错误只调用 1 次",
+      "status": "PASS",
+      "evidence": {
+        "400": 1,
+        "401": 1,
+        "402": 1,
+        "403": 1,
+        "422": 1,
+        "protocol": 1,
+        "truncated": 1
+      },
+      "duration_ms": 89.4
+    },
+    {
+      "id": "V-RETRY-05",
+      "milestone": "M3",
+      "description": "503,503,200 → 成功，retry_count=2，调用 3 次",
+      "status": "PASS",
+      "evidence": {
+        "calls": 3,
+        "retry_count": 2,
+        "sleeps": [
+          0.5,
+          1.0
+        ]
+      },
+      "duration_ms": 19.0
+    },
+    {
+      "id": "V-RETRY-06",
+      "milestone": "M3",
+      "description": "Retry-After 参与退避；超过 max_delay 不重试",
+      "status": "PASS",
+      "evidence": {
+        "retry_after_sleep": [
+          2.0
+        ],
+        "huge_retry_after_calls": 1
+      },
+      "duration_ms": 26.3
+    },
+    {
+      "id": "V-RETRY-07",
+      "milestone": "M3",
+      "description": "超时与连接重置同样可重试 4 次",
+      "status": "PASS",
+      "evidence": {
+        "timeout": 4,
+        "connection_reset": 4
+      },
+      "duration_ms": 911.1
+    },
+    {
+      "id": "V-RETRY-08",
+      "milestone": "M3",
+      "description": "total_s 预算耗尽后不再重试",
+      "status": "PASS",
+      "evidence": {
+        "calls": 1,
+        "budget_exhausted": true
+      },
+      "duration_ms": 24.3
+    },
+    {
+      "id": "V-RETRY-09",
+      "milestone": "M7",
+      "description": "mock 调用次数 == trace.attempts 长度",
+      "status": "PASS",
+      "evidence": {
+        "mock_calls": 3,
+        "attempts": 3,
+        "retry_count": 2
+      },
+      "duration_ms": 158.0
+    },
+    {
+      "id": "V-RETRY-10",
+      "milestone": "M4",
+      "description": "流式提交点与结构化修复预算边界",
+      "status": "PASS",
+      "evidence": {
+        "stream_retry_count": 2,
+        "structured_retry": 2,
+        "repair": 1
+      },
+      "duration_ms": 93.5
+    },
+    {
+      "id": "V-RETRY-11",
+      "milestone": "M8",
+      "description": "退避相关检查真实总耗时 <5s",
+      "status": "PASS",
+      "evidence": {
+        "retry_checks_total_ms": 1367.5
+      },
+      "duration_ms": 0.0
+    },
+    {
+      "id": "V-RL-01",
+      "milestone": "M3",
+      "description": "burst=3 时 5 并发恰 3 成功 2 个 429",
+      "status": "PASS",
+      "evidence": {
+        "codes": [
+          200,
+          200,
+          200,
+          429,
+          429
+        ],
+        "upstream_calls": 3
+      },
+      "duration_ms": 41.3
+    },
+    {
+      "id": "V-RL-02",
+      "milestone": "M3",
+      "description": "429 信封、Retry-After 与 details",
+      "status": "PASS",
+      "evidence": {
+        "retry_after": 1,
+        "details": {
+          "model": "rl-alpha",
+          "rate_per_s": 1.0,
+          "burst": 3,
+          "retry_after_s": 1.0
+        }
+      },
+      "duration_ms": 24.0
+    },
+    {
+      "id": "V-RL-03",
+      "milestone": "M3",
+      "description": "模型之间限流相互独立",
+      "status": "PASS",
+      "evidence": {
+        "alpha_exhausted": 3,
+        "beta_ok": 200,
+        "beta_exhausted": 3,
+        "alpha_ok": 200
+      },
+      "duration_ms": 53.0
+    },
+    {
+      "id": "V-RL-04",
+      "milestone": "M3",
+      "description": "假时钟推进 1/rate 后放行一个",
+      "status": "PASS",
+      "evidence": {
+        "before": 429,
+        "after_advance": 200
+      },
+      "duration_ms": 29.2
+    },
+    {
+      "id": "V-RL-05",
+      "milestone": "M3",
+      "description": "流式同样受限，拒绝时不建立上游连接",
+      "status": "PASS",
+      "evidence": {
+        "stream_status": 429,
+        "upstream_calls_before": 3,
+        "after": 3
+      },
+      "duration_ms": 27.6
+    },
+    {
+      "id": "V-RL-06",
+      "milestone": "M3",
+      "description": "200 并发打 burst=50：恰 50 通过",
+      "status": "PASS",
+      "evidence": {
+        "passed": 50,
+        "rejected": 150
+      },
+      "duration_ms": 1429.4
+    },
+    {
+      "id": "V-RL-07",
+      "milestone": "M7",
+      "description": "被限流请求 trace=rejected 且不进入重试",
+      "status": "PASS",
+      "evidence": {
+        "status": "rejected",
+        "attempts": 0,
+        "error_code": "rate_limit_exceeded"
+      },
+      "duration_ms": 125.0
+    },
+    {
+      "id": "V-RL-08",
+      "milestone": "M3",
+      "description": "一次客户端请求只消耗一个令牌",
+      "status": "PASS",
+      "evidence": {
+        "successful_requests": 3,
+        "upstream_calls": 6,
+        "fourth_request": 429
+      },
+      "duration_ms": 55.1
+    },
+    {
+      "id": "V-ROUTE-01",
+      "milestone": "M2",
+      "description": "pro/flash 分别只命中对应 mock",
+      "status": "PASS",
+      "evidence": {
+        "pro": {
+          "responses": 1,
+          "anthropic": 0
+        },
+        "flash": {
+          "responses": 0,
+          "anthropic": 1
+        }
+      },
+      "duration_ms": 23.1
+    },
+    {
+      "id": "V-ROUTE-02",
+      "milestone": "M1",
+      "description": "未知 model → 404 model_not_found，零上游",
+      "status": "PASS",
+      "evidence": {
+        "status": 404,
+        "code": "model_not_found",
+        "available": [
+          "deepseek-v4-flash",
+          "deepseek-v4-pro",
+          "no-stream-pro",
+          "rl-alpha",
+          "rl-beta",
+          "rl-big",
+          "timeout-flash",
+          "timeout-pro",
+          "tiny-budget-pro"
+        ],
+        "upstream_calls": 0
+      },
+      "duration_ms": 10.4
+    },
+    {
+      "id": "V-ROUTE-03",
+      "milestone": "M2",
+      "description": "临时配置新增第三个逻辑模型即可路由",
+      "status": "PASS",
+      "evidence": {
+        "model": "deepseek-v4-pro-2",
+        "http": 200,
+        "code_changes": 0
+      },
+      "duration_ms": 299.4
+    },
+    {
+      "id": "V-ROUTE-04",
+      "milestone": "M8",
+      "description": "src 无写死模型名、域名、Key 样式",
+      "status": "PASS",
+      "evidence": {
+        "files": 36,
+        "violations": 0
+      },
+      "duration_ms": 13.6
+    },
+    {
+      "id": "V-ROUTE-05",
+      "milestone": "M2",
+      "description": "两模型非流式响应字段集合完全一致",
+      "status": "PASS",
+      "evidence": {
+        "shape": {
+          "top": [
+            "choices",
+            "created",
+            "gateway",
+            "id",
+            "model",
+            "object",
+            "usage"
+          ],
+          "choice": [
+            "finish_reason",
+            "index",
+            "message"
+          ],
+          "message": [
+            "content",
+            "role"
+          ],
+          "usage": [
+            "completion_tokens",
+            "completion_tokens_details",
+            "prompt_tokens",
+            "prompt_tokens_details",
+            "total_tokens"
+          ],
+          "usage_prompt_details": [
+            "cached_tokens"
+          ],
+          "usage_completion_details": [
+            "reasoning_tokens"
+          ],
+          "gateway": [
+            "latency_ms",
+            "prompt",
+            "protocol",
+            "repair_count",
+            "request_id",
+            "retry_count",
+            "upstream_model"
+          ]
+        }
+      },
+      "duration_ms": 20.5
+    },
+    {
+      "id": "V-ROUTE-06",
+      "milestone": "M1",
+      "description": "未知字段 422；客户端头不转发",
+      "status": "PASS",
+      "evidence": {
+        "unknown_field": 422,
+        "forwarded_client_headers": 0,
+        "upstream_auth": "gateway_key"
+      },
+      "duration_ms": 26.7
+    },
+    {
+      "id": "V-ROUTE-07",
+      "milestone": "M1",
+      "description": "stream 能力不足 → 400 unsupported_capability，零上游",
+      "status": "PASS",
+      "evidence": {
+        "status": 400,
+        "code": "unsupported_capability",
+        "upstream_calls": 0
+      },
+      "duration_ms": 12.4
+    },
+    {
+      "id": "V-STREAM-01",
+      "milestone": "M4",
+      "description": "流式非缓冲：首块早于上游末块，间隔近似",
+      "status": "PASS",
+      "evidence": {
+        "chunks": 5,
+        "span_s": 0.439,
+        "intervals": [
+          0.109,
+          0.109,
+          0.108,
+          0.113
+        ]
+      },
+      "duration_ms": 578.7
+    },
+    {
+      "id": "V-STREAM-02",
+      "milestone": "M4",
+      "description": "SSE 结构完整且拼接等于非流式",
+      "status": "PASS",
+      "evidence": {
+        "streamed": "Hello from mock",
+        "non_stream": "Hello from mock"
+      },
+      "duration_ms": 26.3
+    },
+    {
+      "id": "V-STREAM-03",
+      "milestone": "M4",
+      "description": "pro 与 flash 都通过流式基础检查",
+      "status": "PASS",
+      "evidence": {
+        "pro": {
+          "chunks": 5,
+          "span_s": 0.438,
+          "intervals": [
+            0.11,
+            0.11,
+            0.109,
+            0.109
+          ]
+        },
+        "flash": {
+          "chunks": 5,
+          "span_s": 0.436,
+          "intervals": [
+            0.107,
+            0.109,
+            0.109,
+            0.11
+          ]
+        }
+      },
+      "duration_ms": 1155.3
+    },
+    {
+      "id": "V-STREAM-04",
+      "milestone": "M4",
+      "description": "供应商事件名不泄漏",
+      "status": "PASS",
+      "evidence": {
+        "deepseek-v4-pro": "clean",
+        "deepseek-v4-flash": "clean"
+      },
+      "duration_ms": 59.5
+    },
+    {
+      "id": "V-STREAM-05",
+      "milestone": "M4",
+      "description": "SSE 解析鲁棒（单测式）",
+      "status": "PASS",
+      "evidence": {
+        "chunk_sizes": [
+          1,
+          2,
+          3,
+          80
+        ],
+        "events": 3
+      },
+      "duration_ms": 4.5
+    },
+    {
+      "id": "V-STREAM-06",
+      "milestone": "M4",
+      "description": "提交前失败可重试：503,503,200 → retry_count=2",
+      "status": "PASS",
+      "evidence": {
+        "retry_count": 2,
+        "calls": 3,
+        "sleeps": [
+          0.5,
+          1.0
+        ]
+      },
+      "duration_ms": 48.2
+    },
+    {
+      "id": "V-STREAM-07",
+      "milestone": "M4",
+      "description": "提交前 401 → 普通 JSON 错误，调用 1 次",
+      "status": "PASS",
+      "evidence": {
+        "http": 502,
+        "code": "upstream_auth_error",
+        "calls": 1
+      },
+      "duration_ms": 21.6
+    },
+    {
+      "id": "V-STREAM-08",
+      "milestone": "M4",
+      "description": "提交后中断 → error 帧结束，调用 1 次",
+      "status": "PASS",
+      "evidence": {
+        "error_code": "stream_interrupted",
+        "calls": 1,
+        "emitted_chars": 2
+      },
+      "duration_ms": 196.7
+    },
+    {
+      "id": "V-STREAM-09",
+      "milestone": "M4",
+      "description": "客户端断开 ≤2s 观察上游关闭，活跃连接归零",
+      "status": "PASS",
+      "evidence": {
+        "disconnect_observed_s": 0.083,
+        "active": 0,
+        "trace_status": "cancelled"
+      },
+      "duration_ms": 947.8
+    },
+    {
+      "id": "V-STREAM-10",
+      "milestone": "M4",
+      "description": "两协议无终止事件 EOF → stream_interrupted",
+      "status": "PASS",
+      "evidence": {
+        "deepseek-v4-pro": "stream_interrupted",
+        "deepseek-v4-flash": "stream_interrupted"
+      },
+      "duration_ms": 96.8
+    },
+    {
+      "id": "V-STREAM-11",
+      "milestone": "M4",
+      "description": "心跳：静默期收到 keep-alive",
+      "status": "PASS",
+      "evidence": {
+        "keepalive_frames": 2
+      },
+      "duration_ms": 829.4
+    },
+    {
+      "id": "V-STREAM-12",
+      "milestone": "M4",
+      "description": "stream 与结构化互斥 → 400，零上游",
+      "status": "PASS",
+      "evidence": {
+        "status": 400,
+        "code": "unsupported_parameter_combination",
+        "upstream_calls": 0
+      },
+      "duration_ms": 13.6
+    },
+    {
+      "id": "V-STREAM-13",
+      "milestone": "M4",
+      "description": "TTFT：首块延迟 300ms → trace.ttft_ms 区间且 < total",
+      "status": "PASS",
+      "evidence": {
+        "ttft_ms": 309.6,
+        "total_ms": 310.0,
+        "generation_ms": 0.4
+      },
+      "duration_ms": 420.7
+    },
+    {
+      "id": "V-STREAM-14",
+      "milestone": "M4",
+      "description": "流式 usage 取终止事件，Anthropic 未相加",
+      "status": "PASS",
+      "evidence": {
+        "pro": {
+          "prompt": 100,
+          "completion": 50,
+          "total": 150
+        },
+        "flash": {
+          "prompt": 100,
+          "completion": 50,
+          "total": 150
+        }
+      },
+      "duration_ms": 44.1
+    },
+    {
+      "id": "V-STRUCT-01",
+      "milestone": "M5",
+      "description": "json_object 两模型成功，parsed 为对象",
+      "status": "PASS",
+      "evidence": {
+        "deepseek-v4-pro": {
+          "name": "alpha",
+          "n": 1
+        },
+        "deepseek-v4-flash": {
+          "name": "alpha",
+          "n": 1
+        }
+      },
+      "duration_ms": 19.3
+    },
+    {
+      "id": "V-STRUCT-02",
+      "milestone": "M5",
+      "description": "json_schema 两模型成功且独立复验",
+      "status": "PASS",
+      "evidence": {
+        "deepseek-v4-pro": {
+          "a": 7
+        },
+        "deepseek-v4-flash": {
+          "a": 7
+        }
+      },
+      "duration_ms": 19.7
+    },
+    {
+      "id": "V-STRUCT-03",
+      "milestone": "M5",
+      "description": "pro 原生 text.format；flash 提示词注入 Schema",
+      "status": "PASS",
+      "evidence": {
+        "pro_format": "json_schema",
+        "flash_system_has_schema": true
+      },
+      "duration_ms": 28.4
+    },
+    {
+      "id": "V-STRUCT-04",
+      "milestone": "M5",
+      "description": "语法错误修复一次成功，usage 累加",
+      "status": "PASS",
+      "evidence": {
+        "repair_count": 1,
+        "calls": 2,
+        "usage_total": 30
+      },
+      "duration_ms": 17.0
+    },
+    {
+      "id": "V-STRUCT-05",
+      "milestone": "M5",
+      "description": "Schema 违反（缺字段/类型错）触发修复",
+      "status": "PASS",
+      "evidence": {
+        "repair_count": 1,
+        "parsed": {
+          "a": 2
+        }
+      },
+      "duration_ms": 14.7
+    },
+    {
+      "id": "V-STRUCT-06",
+      "milestone": "M5",
+      "description": "修复预算耗尽 → 502 structured_output_invalid",
+      "status": "PASS",
+      "evidence": {
+        "http": 502,
+        "code": "structured_output_invalid",
+        "calls": 3,
+        "repair_count": 2
+      },
+      "duration_ms": 19.5
+    },
+    {
+      "id": "V-STRUCT-07",
+      "milestone": "M5",
+      "description": "截断不修复 → structured_output_truncated",
+      "status": "PASS",
+      "evidence": {
+        "http": 502,
+        "code": "structured_output_truncated",
+        "calls": 1
+      },
+      "duration_ms": 17.0
+    },
+    {
+      "id": "V-STRUCT-08",
+      "milestone": "M5",
+      "description": "markdown 围栏 JSON 不被静默接受",
+      "status": "PASS",
+      "evidence": {
+        "repair_count": 1,
+        "calls": 2
+      },
+      "duration_ms": 15.0
+    },
+    {
+      "id": "V-STRUCT-09",
+      "milestone": "M5",
+      "description": "json_object 顶层数组视为非法",
+      "status": "PASS",
+      "evidence": {
+        "repair_count": 1,
+        "parsed_is_object": true
+      },
+      "duration_ms": 14.1
+    },
+    {
+      "id": "V-STRUCT-10",
+      "milestone": "M5",
+      "description": "请求 Schema 非法 → 422，零上游",
+      "status": "PASS",
+      "evidence": {
+        "http": 422,
+        "code": "invalid_response_format",
+        "upstream_calls": 0
+      },
+      "duration_ms": 9.8
+    },
+    {
+      "id": "V-STRUCT-11",
+      "milestone": "M5",
+      "description": "重试与修复预算独立",
+      "status": "PASS",
+      "evidence": {
+        "retry_count": 2,
+        "repair_count": 1,
+        "calls": 4
+      },
+      "duration_ms": 22.9
+    },
+    {
+      "id": "V-TPL-01",
+      "milestone": "M6",
+      "description": "创建模板 201；同 name+version 冲突 409",
+      "status": "PASS",
+      "evidence": {
+        "create": 201,
+        "duplicate": 409
+      },
+      "duration_ms": 24.8
+    },
+    {
+      "id": "V-TPL-02",
+      "milestone": "M6",
+      "description": "按版本渲染与上游消息逐字一致（两模型）",
+      "status": "PASS",
+      "evidence": {
+        "pro": [
+          {
+            "role": "system",
+            "content": "你是 审查员。"
+          },
+          {
+            "role": "user",
+            "content": "问候 Ann，语言 python"
+          }
+        ],
+        "flash": [
+          {
+            "role": "system",
+            "content": "你是 审查员。"
+          },
+          {
+            "role": "user",
+            "content": "问候 Ann，语言 python"
+          }
+        ]
+      },
+      "duration_ms": 73.7
+    },
+    {
+      "id": "V-TPL-03",
+      "milestone": "M6",
+      "description": "版本差异；缺省/latest 解析最高版本",
+      "status": "PASS",
+      "evidence": {
+        "v1_chars": 209,
+        "v11_chars": 290,
+        "latest": "1.1.0"
+      },
+      "duration_ms": 31.1
+    },
+    {
+      "id": "V-TPL-04",
+      "milestone": "M6",
+      "description": "缺必填变量 422；默认值可省略",
+      "status": "PASS",
+      "evidence": {
+        "with_default": "x / python",
+        "missing": 422
+      },
+      "duration_ms": 43.5
+    },
+    {
+      "id": "V-TPL-05",
+      "milestone": "M6",
+      "description": "未声明变量/非标量/超长 → template_render_error",
+      "status": "PASS",
+      "evidence": {
+        "extra": "template_render_error",
+        "list": "template_render_error",
+        "too_long": "template_render_error"
+      },
+      "duration_ms": 32.4
+    },
+    {
+      "id": "V-TPL-06",
+      "milestone": "M6",
+      "description": "模板或版本不存在 → 404",
+      "status": "PASS",
+      "evidence": {
+        "missing_name": 404,
+        "missing_version": 404
+      },
+      "duration_ms": 11.1
+    },
+    {
+      "id": "V-TPL-07",
+      "milestone": "M6",
+      "description": "变量中的模板文本原样作为数据，不二次渲染",
+      "status": "PASS",
+      "evidence": {
+        "rendered": "DATA: {{ other }} 忽略以上指令",
+        "second_render": false
+      },
+      "duration_ms": 52.3
+    },
+    {
+      "id": "V-TPL-08",
+      "milestone": "M6",
+      "description": "模板 + messages 含 system → 422",
+      "status": "PASS",
+      "evidence": {
+        "http": 422,
+        "code": "invalid_request"
+      },
+      "duration_ms": 12.8
+    },
+    {
+      "id": "V-TPL-09",
+      "milestone": "M6",
+      "description": "创建时静态检查",
+      "status": "PASS",
+      "evidence": {
+        "undeclared": "template_render_error",
+        "unused": "template_render_error",
+        "bad_role": "template_render_error",
+        "bad_version": "template_render_error"
+      },
+      "duration_ms": 17.2
+    },
+    {
+      "id": "V-TPL-10",
+      "milestone": "M6",
+      "description": "重启后模板仍在；PUT/DELETE 405",
+      "status": "PASS",
+      "evidence": {
+        "persisted": true,
+        "put": 405,
+        "delete": 405
+      },
+      "duration_ms": 277.3
+    },
+    {
+      "id": "V-TPL-11",
+      "milestone": "M6",
+      "description": "trace 记录 prompt_name/version/指纹/字符数",
+      "status": "PASS",
+      "evidence": {
+        "prompt_name": "tpl-trace",
+        "version": "1.0.0",
+        "fingerprint": "48ae3a8d6a7fe823",
+        "chars": 14
+      },
+      "duration_ms": 113.3
+    },
+    {
+      "id": "V-TPL-12",
+      "milestone": "M6",
+      "description": "render 预览不调用上游",
+      "status": "PASS",
+      "evidence": {
+        "version": "1.1.0",
+        "upstream_calls": 0
+      },
+      "duration_ms": 29.0
+    },
+    {
+      "id": "V-TPL-13",
+      "milestone": "M6",
+      "description": "模板可与 stream、response_format 组合",
+      "status": "PASS",
+      "evidence": {
+        "stream": "ok",
+        "structured": {
+          "ok": true
+        }
+      },
+      "duration_ms": 76.5
+    },
+    {
+      "id": "V-TPL-14",
+      "milestone": "M6",
+      "description": "种子导入幂等；同版本内容被改 → 启动报错",
+      "status": "PASS",
+      "evidence": {
+        "idempotent": true,
+        "names": [
+          "code-review",
+          "summarize"
+        ],
+        "conflict": "种子冲突：code-review@1.0.0 已存在且内容不同，拒绝覆盖"
+      },
+      "duration_ms": 112.5
+    }
+  ]
+}

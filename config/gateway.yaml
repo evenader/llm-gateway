@@ -1,0 +1,30 @@
+server: {host: 0.0.0.0, port: 8000}
+auth: {enabled: false, keys_env: GATEWAY_API_KEYS}
+retry: {max_retries: 3, base_delay_s: 0.5, factor: 2.0, max_delay_s: 8.0, jitter: full}
+stream: {heartbeat_interval_s: 15}
+structured: {max_repairs: 2}
+defaults:
+  timeout: {connect_s: 5, read_s: 60, total_s: 120}
+  rate_limit: {rate_per_s: 5, burst: 10}
+observability: {enabled: true, db_path: data/observability.db, queue_size: 10000}
+prompts: {db_path: data/prompts.db, seed_dir: config/prompts}
+models:
+  deepseek-v4-pro:
+    protocol: openai_responses
+    base_url: https://api.deepseek.com
+    endpoint_path: /responses
+    api_key_env: DEEPSEEK_API_KEY
+    upstream_model: deepseek-v4-pro
+    rate_limit: {rate_per_s: 5, burst: 10}
+    capabilities: {stream: true, native_json_object: true, native_json_schema: true}
+    thinking: disabled
+  deepseek-v4-flash:
+    protocol: anthropic_messages
+    base_url: https://api.deepseek.com/anthropic
+    endpoint_path: /v1/messages
+    api_key_env: DEEPSEEK_API_KEY
+    upstream_model: deepseek-v4-flash
+    default_max_tokens: 4096
+    rate_limit: {rate_per_s: 5, burst: 10}
+    capabilities: {stream: true, native_json_object: false, native_json_schema: false}
+    thinking: disabled
