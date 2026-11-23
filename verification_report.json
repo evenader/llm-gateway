@@ -1,5 +1,5 @@
 {
-  "command": "scripts\\verify_all.py --verbose",
+  "command": "scripts\\verify_all.py",
   "completeness_issues": [],
   "summary": {
     "两个模型调用": "OK",
@@ -27,7 +27,7 @@
         ],
         "instructions": "S1"
       },
-      "duration_ms": 234.4
+      "duration_ms": 350.5
     },
     {
       "id": "V-ADP-02",
@@ -39,7 +39,7 @@
         "system": "S1",
         "max_tokens": 128
       },
-      "duration_ms": 20.1
+      "duration_ms": 23.0
     },
     {
       "id": "V-ADP-03",
@@ -51,7 +51,7 @@
         "flash_system": "A\\nB",
         "flash_user": "U1\\n\\nU2"
       },
-      "duration_ms": 23.8
+      "duration_ms": 25.8
     },
     {
       "id": "V-ADP-04",
@@ -72,7 +72,7 @@
           "flash": "content_filter"
         }
       },
-      "duration_ms": 46.3
+      "duration_ms": 56.1
     },
     {
       "id": "V-ADP-05",
@@ -103,7 +103,7 @@
           }
         }
       },
-      "duration_ms": 16.9
+      "duration_ms": 20.2
     },
     {
       "id": "V-ADP-06",
@@ -135,7 +135,7 @@
         },
         "trace_usage_missing": true
       },
-      "duration_ms": 127.0
+      "duration_ms": 112.9
     },
     {
       "id": "V-ADP-07",
@@ -146,7 +146,7 @@
         "captured_responses": 404,
         "leaks": 0
       },
-      "duration_ms": 6.3
+      "duration_ms": 10.4
     },
     {
       "id": "V-ADP-08",
@@ -156,23 +156,23 @@
       "evidence": {
         "models": {
           "deepseek-v4-pro": {
-            "nonstream_total_tokens": 18,
+            "nonstream_total_tokens": 37,
             "stream_total_tokens": 37,
-            "nonstream_chars": 33,
-            "stream_chars": 117
+            "nonstream_chars": 102,
+            "stream_chars": 116
           },
           "deepseek-v4-flash": {
             "nonstream_total_tokens": 20,
-            "stream_total_tokens": 20,
+            "stream_total_tokens": 11,
             "nonstream_chars": 40,
-            "stream_chars": 40
+            "stream_chars": 7
           }
         },
         "subchecks": [
           {
             "name": "deepseek-v4-pro 非流式",
             "status": "OK",
-            "detail": "total_tokens=18"
+            "detail": "total_tokens=37"
           },
           {
             "name": "deepseek-v4-pro 流式",
@@ -187,11 +187,11 @@
           {
             "name": "deepseek-v4-flash 流式",
             "status": "OK",
-            "detail": "total_tokens=20"
+            "detail": "total_tokens=11"
           }
         ]
       },
-      "duration_ms": 3743.9
+      "duration_ms": 3095.8
     },
     {
       "id": "V-ERR-01",
@@ -207,7 +207,7 @@
         "anthropic_timeout": "ok",
         "connection_reset_calls": 4
       },
-      "duration_ms": 2267.7
+      "duration_ms": 2346.1
     },
     {
       "id": "V-ERR-02",
@@ -224,9 +224,9 @@
           "stage",
           "type"
         ],
-        "request_id": "a8791d1341614c06a5b65f69ecb2a5dc"
+        "request_id": "db5d94c11eeb427a9df48a5696a34f23"
       },
-      "duration_ms": 7.4
+      "duration_ms": 8.4
     },
     {
       "id": "V-ERR-03",
@@ -237,7 +237,7 @@
         "message_length": 61,
         "contains_key": false
       },
-      "duration_ms": 20.3
+      "duration_ms": 24.5
     },
     {
       "id": "V-ERR-04",
@@ -262,7 +262,7 @@
           "code": "invalid_request"
         }
       },
-      "duration_ms": 30.4
+      "duration_ms": 35.8
     },
     {
       "id": "V-ERR-05",
@@ -272,9 +272,9 @@
       "evidence": {
         "status": 500,
         "code": "internal_error",
-        "request_id": "05e23cfb1ac443aaa57c70f63f140455"
+        "request_id": "03ac1f0ba9324a68a8178bf95a5bebf5"
       },
-      "duration_ms": 145.1
+      "duration_ms": 202.5
     },
     {
       "id": "V-ERR-06",
@@ -289,7 +289,7 @@
         "deepseek-v4-flash:missing_output": "upstream_protocol_error",
         "deepseek-v4-flash:empty_text": "upstream_empty_response"
       },
-      "duration_ms": 66.4
+      "duration_ms": 78.1
     },
     {
       "id": "V-ERR-07",
@@ -306,7 +306,7 @@
           "code": "rate_limit_exceeded"
         }
       },
-      "duration_ms": 49.4
+      "duration_ms": 53.8
     },
     {
       "id": "V-OBS-01",
@@ -314,12 +314,12 @@
       "description": "成功/失败/拒绝/取消各恰一条 trace",
       "status": "PASS",
       "evidence": {
-        "completed": "dde0711f00024f2ebbe95f02d24c7434",
-        "failed": "cce407f1d05a458793edc06b916fdcc9",
-        "rejected": "c4e9c8bb10b54c20b4a4c460e852b51f",
-        "cancelled": "99075253f7ef4b149e6f82e195c54995"
+        "completed": "8a0f66666b494c81b7cc9b1c035c3ed6",
+        "failed": "d50af2bdc9154cb6b9bf17e03a1a15a7",
+        "rejected": "a0f1765f692641bc87c06787fb965cc2",
+        "cancelled": "1376209a9df64421bdc764426bda3e41"
       },
-      "duration_ms": 837.9
+      "duration_ms": 873.5
     },
     {
       "id": "V-OBS-02",
@@ -342,7 +342,7 @@
           "total_tokens": 150
         }
       },
-      "duration_ms": 71.9
+      "duration_ms": 188.4
     },
     {
       "id": "V-OBS-03",
@@ -351,15 +351,15 @@
       "status": "PASS",
       "evidence": {
         "non_stream": {
-          "total_ms": 407.7
+          "total_ms": 417.7
         },
         "stream": {
-          "ttft_ms": 334.7,
-          "total_ms": 335.2,
+          "ttft_ms": 316.6,
+          "total_ms": 317.1,
           "generation_ms": 0.5
         }
       },
-      "duration_ms": 939.8
+      "duration_ms": 887.3
     },
     {
       "id": "V-OBS-04",
@@ -375,7 +375,7 @@
           1.0
         ]
       },
-      "duration_ms": 42.2
+      "duration_ms": 67.1
     },
     {
       "id": "V-OBS-05",
@@ -392,7 +392,7 @@
           "code": "rate_limit_exceeded"
         }
       },
-      "duration_ms": 261.8
+      "duration_ms": 261.4
     },
     {
       "id": "V-OBS-06",
@@ -408,7 +408,7 @@
           "version": "1.1.0"
         }
       },
-      "duration_ms": 60.6
+      "duration_ms": 64.6
     },
     {
       "id": "V-OBS-07",
@@ -428,7 +428,7 @@
           "unknown"
         ]
       },
-      "duration_ms": 150.0
+      "duration_ms": 128.6
     },
     {
       "id": "V-OBS-08",
@@ -440,7 +440,7 @@
         "prompt_chars": 35,
         "fingerprint": "09a903cdd71452d5"
       },
-      "duration_ms": 110.8
+      "duration_ms": 63.1
     },
     {
       "id": "V-OBS-09",
@@ -451,7 +451,7 @@
         "business_imports": 0,
         "main_wires_plugin": true
       },
-      "duration_ms": 26.7
+      "duration_ms": 39.9
     },
     {
       "id": "V-OBS-10",
@@ -464,7 +464,7 @@
         "stream": "ok",
         "render": 200
       },
-      "duration_ms": 290.8
+      "duration_ms": 288.4
     },
     {
       "id": "V-OBS-11",
@@ -472,12 +472,12 @@
       "description": "故障隔离：订阅者异常/存储不可写/队列满",
       "status": "PASS",
       "evidence": {
-        "write_errors": 5,
-        "dropped": 4,
+        "write_errors": 4,
+        "dropped": 5,
         "subscriber_errors": 21,
-        "overhead_ms": 0.15
+        "overhead_ms": 2.69
       },
-      "duration_ms": 786.9
+      "duration_ms": 685.3
     },
     {
       "id": "V-OBS-12",
@@ -488,7 +488,7 @@
         "history_rows": 5,
         "single_query": 200
       },
-      "duration_ms": 324.6
+      "duration_ms": 281.0
     },
     {
       "id": "V-RETRY-01",
@@ -504,7 +504,7 @@
         ],
         "code": "upstream_overloaded"
       },
-      "duration_ms": 39.4
+      "duration_ms": 24.9
     },
     {
       "id": "V-RETRY-02",
@@ -523,7 +523,7 @@
           1.3018689460797075
         ]
       },
-      "duration_ms": 3.1
+      "duration_ms": 3.0
     },
     {
       "id": "V-RETRY-03",
@@ -537,7 +537,7 @@
           8.0
         ]
       },
-      "duration_ms": 3.4
+      "duration_ms": 2.9
     },
     {
       "id": "V-RETRY-04",
@@ -553,7 +553,7 @@
         "protocol": 1,
         "truncated": 1
       },
-      "duration_ms": 89.4
+      "duration_ms": 101.7
     },
     {
       "id": "V-RETRY-05",
@@ -568,7 +568,7 @@
           1.0
         ]
       },
-      "duration_ms": 19.0
+      "duration_ms": 23.1
     },
     {
       "id": "V-RETRY-06",
@@ -581,7 +581,7 @@
         ],
         "huge_retry_after_calls": 1
       },
-      "duration_ms": 26.3
+      "duration_ms": 38.0
     },
     {
       "id": "V-RETRY-07",
@@ -592,7 +592,7 @@
         "timeout": 4,
         "connection_reset": 4
       },
-      "duration_ms": 911.1
+      "duration_ms": 905.5
     },
     {
       "id": "V-RETRY-08",
@@ -603,7 +603,7 @@
         "calls": 1,
         "budget_exhausted": true
       },
-      "duration_ms": 24.3
+      "duration_ms": 25.0
     },
     {
       "id": "V-RETRY-09",
@@ -615,7 +615,7 @@
         "attempts": 3,
         "retry_count": 2
       },
-      "duration_ms": 158.0
+      "duration_ms": 101.1
     },
     {
       "id": "V-RETRY-10",
@@ -627,7 +627,7 @@
         "structured_retry": 2,
         "repair": 1
       },
-      "duration_ms": 93.5
+      "duration_ms": 73.0
     },
     {
       "id": "V-RETRY-11",
@@ -635,7 +635,7 @@
       "description": "退避相关检查真实总耗时 <5s",
       "status": "PASS",
       "evidence": {
-        "retry_checks_total_ms": 1367.5
+        "retry_checks_total_ms": 1298.2
       },
       "duration_ms": 0.0
     },
@@ -654,7 +654,7 @@
         ],
         "upstream_calls": 3
       },
-      "duration_ms": 41.3
+      "duration_ms": 46.9
     },
     {
       "id": "V-RL-02",
@@ -670,7 +670,7 @@
           "retry_after_s": 1.0
         }
       },
-      "duration_ms": 24.0
+      "duration_ms": 27.4
     },
     {
       "id": "V-RL-03",
@@ -683,7 +683,7 @@
         "beta_exhausted": 3,
         "alpha_ok": 200
       },
-      "duration_ms": 53.0
+      "duration_ms": 61.9
     },
     {
       "id": "V-RL-04",
@@ -694,7 +694,7 @@
         "before": 429,
         "after_advance": 200
       },
-      "duration_ms": 29.2
+      "duration_ms": 32.3
     },
     {
       "id": "V-RL-05",
@@ -706,7 +706,7 @@
         "upstream_calls_before": 3,
         "after": 3
       },
-      "duration_ms": 27.6
+      "duration_ms": 31.9
     },
     {
       "id": "V-RL-06",
@@ -717,7 +717,7 @@
         "passed": 50,
         "rejected": 150
       },
-      "duration_ms": 1429.4
+      "duration_ms": 1692.9
     },
     {
       "id": "V-RL-07",
@@ -729,7 +729,7 @@
         "attempts": 0,
         "error_code": "rate_limit_exceeded"
       },
-      "duration_ms": 125.0
+      "duration_ms": 148.5
     },
     {
       "id": "V-RL-08",
@@ -741,7 +741,7 @@
         "upstream_calls": 6,
         "fourth_request": 429
       },
-      "duration_ms": 55.1
+      "duration_ms": 43.8
     },
     {
       "id": "V-ROUTE-01",
@@ -758,7 +758,7 @@
           "anthropic": 1
         }
       },
-      "duration_ms": 23.1
+      "duration_ms": 27.6
     },
     {
       "id": "V-ROUTE-02",
@@ -781,7 +781,7 @@
         ],
         "upstream_calls": 0
       },
-      "duration_ms": 10.4
+      "duration_ms": 12.4
     },
     {
       "id": "V-ROUTE-03",
@@ -793,7 +793,7 @@
         "http": 200,
         "code_changes": 0
       },
-      "duration_ms": 299.4
+      "duration_ms": 301.4
     },
     {
       "id": "V-ROUTE-04",
@@ -804,7 +804,7 @@
         "files": 36,
         "violations": 0
       },
-      "duration_ms": 13.6
+      "duration_ms": 31.3
     },
     {
       "id": "V-ROUTE-05",
@@ -855,7 +855,7 @@
           ]
         }
       },
-      "duration_ms": 20.5
+      "duration_ms": 18.7
     },
     {
       "id": "V-ROUTE-06",
@@ -867,7 +867,7 @@
         "forwarded_client_headers": 0,
         "upstream_auth": "gateway_key"
       },
-      "duration_ms": 26.7
+      "duration_ms": 24.5
     },
     {
       "id": "V-ROUTE-07",
@@ -879,7 +879,7 @@
         "code": "unsupported_capability",
         "upstream_calls": 0
       },
-      "duration_ms": 12.4
+      "duration_ms": 11.7
     },
     {
       "id": "V-STREAM-01",
@@ -888,15 +888,15 @@
       "status": "PASS",
       "evidence": {
         "chunks": 5,
-        "span_s": 0.439,
+        "span_s": 0.434,
         "intervals": [
           0.109,
-          0.109,
-          0.108,
-          0.113
+          0.11,
+          0.106,
+          0.109
         ]
       },
-      "duration_ms": 578.7
+      "duration_ms": 576.3
     },
     {
       "id": "V-STREAM-02",
@@ -907,7 +907,7 @@
         "streamed": "Hello from mock",
         "non_stream": "Hello from mock"
       },
-      "duration_ms": 26.3
+      "duration_ms": 31.5
     },
     {
       "id": "V-STREAM-03",
@@ -917,26 +917,26 @@
       "evidence": {
         "pro": {
           "chunks": 5,
-          "span_s": 0.438,
+          "span_s": 0.434,
           "intervals": [
-            0.11,
-            0.11,
+            0.108,
+            0.108,
             0.109,
-            0.109
+            0.11
           ]
         },
         "flash": {
           "chunks": 5,
-          "span_s": 0.436,
+          "span_s": 0.437,
           "intervals": [
-            0.107,
             0.109,
             0.109,
-            0.11
+            0.109,
+            0.111
           ]
         }
       },
-      "duration_ms": 1155.3
+      "duration_ms": 1152.8
     },
     {
       "id": "V-STREAM-04",
@@ -947,7 +947,7 @@
         "deepseek-v4-pro": "clean",
         "deepseek-v4-flash": "clean"
       },
-      "duration_ms": 59.5
+      "duration_ms": 42.6
     },
     {
       "id": "V-STREAM-05",
@@ -963,7 +963,7 @@
         ],
         "events": 3
       },
-      "duration_ms": 4.5
+      "duration_ms": 4.9
     },
     {
       "id": "V-STREAM-06",
@@ -978,7 +978,7 @@
           1.0
         ]
       },
-      "duration_ms": 48.2
+      "duration_ms": 56.1
     },
     {
       "id": "V-STREAM-07",
@@ -990,7 +990,7 @@
         "code": "upstream_auth_error",
         "calls": 1
       },
-      "duration_ms": 21.6
+      "duration_ms": 27.2
     },
     {
       "id": "V-STREAM-08",
@@ -1002,7 +1002,7 @@
         "calls": 1,
         "emitted_chars": 2
       },
-      "duration_ms": 196.7
+      "duration_ms": 204.2
     },
     {
       "id": "V-STREAM-09",
@@ -1010,11 +1010,11 @@
       "description": "客户端断开 ≤2s 观察上游关闭，活跃连接归零",
       "status": "PASS",
       "evidence": {
-        "disconnect_observed_s": 0.083,
+        "disconnect_observed_s": 0.066,
         "active": 0,
         "trace_status": "cancelled"
       },
-      "duration_ms": 947.8
+      "duration_ms": 911.6
     },
     {
       "id": "V-STREAM-10",
@@ -1025,7 +1025,7 @@
         "deepseek-v4-pro": "stream_interrupted",
         "deepseek-v4-flash": "stream_interrupted"
       },
-      "duration_ms": 96.8
+      "duration_ms": 127.5
     },
     {
       "id": "V-STREAM-11",
@@ -1035,7 +1035,7 @@
       "evidence": {
         "keepalive_frames": 2
       },
-      "duration_ms": 829.4
+      "duration_ms": 846.1
     },
     {
       "id": "V-STREAM-12",
@@ -1047,7 +1047,7 @@
         "code": "unsupported_parameter_combination",
         "upstream_calls": 0
       },
-      "duration_ms": 13.6
+      "duration_ms": 13.8
     },
     {
       "id": "V-STREAM-13",
@@ -1055,11 +1055,11 @@
       "description": "TTFT：首块延迟 300ms → trace.ttft_ms 区间且 < total",
       "status": "PASS",
       "evidence": {
-        "ttft_ms": 309.6,
-        "total_ms": 310.0,
-        "generation_ms": 0.4
+        "ttft_ms": 313.6,
+        "total_ms": 314.1,
+        "generation_ms": 0.5
       },
-      "duration_ms": 420.7
+      "duration_ms": 411.0
     },
     {
       "id": "V-STREAM-14",
@@ -1078,7 +1078,7 @@
           "total": 150
         }
       },
-      "duration_ms": 44.1
+      "duration_ms": 49.8
     },
     {
       "id": "V-STRUCT-01",
@@ -1095,7 +1095,7 @@
           "n": 1
         }
       },
-      "duration_ms": 19.3
+      "duration_ms": 25.0
     },
     {
       "id": "V-STRUCT-02",
@@ -1110,7 +1110,7 @@
           "a": 7
         }
       },
-      "duration_ms": 19.7
+      "duration_ms": 30.8
     },
     {
       "id": "V-STRUCT-03",
@@ -1121,7 +1121,7 @@
         "pro_format": "json_schema",
         "flash_system_has_schema": true
       },
-      "duration_ms": 28.4
+      "duration_ms": 35.3
     },
     {
       "id": "V-STRUCT-04",
@@ -1133,7 +1133,7 @@
         "calls": 2,
         "usage_total": 30
       },
-      "duration_ms": 17.0
+      "duration_ms": 22.2
     },
     {
       "id": "V-STRUCT-05",
@@ -1146,7 +1146,7 @@
           "a": 2
         }
       },
-      "duration_ms": 14.7
+      "duration_ms": 17.2
     },
     {
       "id": "V-STRUCT-06",
@@ -1159,7 +1159,7 @@
         "calls": 3,
         "repair_count": 2
       },
-      "duration_ms": 19.5
+      "duration_ms": 24.3
     },
     {
       "id": "V-STRUCT-07",
@@ -1171,7 +1171,7 @@
         "code": "structured_output_truncated",
         "calls": 1
       },
-      "duration_ms": 17.0
+      "duration_ms": 17.3
     },
     {
       "id": "V-STRUCT-08",
@@ -1182,7 +1182,7 @@
         "repair_count": 1,
         "calls": 2
       },
-      "duration_ms": 15.0
+      "duration_ms": 18.2
     },
     {
       "id": "V-STRUCT-09",
@@ -1193,7 +1193,7 @@
         "repair_count": 1,
         "parsed_is_object": true
       },
-      "duration_ms": 14.1
+      "duration_ms": 17.0
     },
     {
       "id": "V-STRUCT-10",
@@ -1205,7 +1205,7 @@
         "code": "invalid_response_format",
         "upstream_calls": 0
       },
-      "duration_ms": 9.8
+      "duration_ms": 11.3
     },
     {
       "id": "V-STRUCT-11",
@@ -1217,7 +1217,7 @@
         "repair_count": 1,
         "calls": 4
       },
-      "duration_ms": 22.9
+      "duration_ms": 26.0
     },
     {
       "id": "V-TPL-01",
@@ -1228,7 +1228,7 @@
         "create": 201,
         "duplicate": 409
       },
-      "duration_ms": 24.8
+      "duration_ms": 33.6
     },
     {
       "id": "V-TPL-02",
@@ -1257,7 +1257,7 @@
           }
         ]
       },
-      "duration_ms": 73.7
+      "duration_ms": 42.3
     },
     {
       "id": "V-TPL-03",
@@ -1269,7 +1269,7 @@
         "v11_chars": 290,
         "latest": "1.1.0"
       },
-      "duration_ms": 31.1
+      "duration_ms": 35.1
     },
     {
       "id": "V-TPL-04",
@@ -1280,7 +1280,7 @@
         "with_default": "x / python",
         "missing": 422
       },
-      "duration_ms": 43.5
+      "duration_ms": 56.0
     },
     {
       "id": "V-TPL-05",
@@ -1292,7 +1292,7 @@
         "list": "template_render_error",
         "too_long": "template_render_error"
       },
-      "duration_ms": 32.4
+      "duration_ms": 46.6
     },
     {
       "id": "V-TPL-06",
@@ -1303,7 +1303,7 @@
         "missing_name": 404,
         "missing_version": 404
       },
-      "duration_ms": 11.1
+      "duration_ms": 13.1
     },
     {
       "id": "V-TPL-07",
@@ -1314,7 +1314,7 @@
         "rendered": "DATA: {{ other }} 忽略以上指令",
         "second_render": false
       },
-      "duration_ms": 52.3
+      "duration_ms": 37.1
     },
     {
       "id": "V-TPL-08",
@@ -1325,7 +1325,7 @@
         "http": 422,
         "code": "invalid_request"
       },
-      "duration_ms": 12.8
+      "duration_ms": 10.7
     },
     {
       "id": "V-TPL-09",
@@ -1338,7 +1338,7 @@
         "bad_role": "template_render_error",
         "bad_version": "template_render_error"
       },
-      "duration_ms": 17.2
+      "duration_ms": 17.0
     },
     {
       "id": "V-TPL-10",
@@ -1350,7 +1350,7 @@
         "put": 405,
         "delete": 405
       },
-      "duration_ms": 277.3
+      "duration_ms": 290.0
     },
     {
       "id": "V-TPL-11",
@@ -1363,7 +1363,7 @@
         "fingerprint": "48ae3a8d6a7fe823",
         "chars": 14
       },
-      "duration_ms": 113.3
+      "duration_ms": 75.3
     },
     {
       "id": "V-TPL-12",
@@ -1374,7 +1374,7 @@
         "version": "1.1.0",
         "upstream_calls": 0
       },
-      "duration_ms": 29.0
+      "duration_ms": 14.4
     },
     {
       "id": "V-TPL-13",
@@ -1387,7 +1387,7 @@
           "ok": true
         }
       },
-      "duration_ms": 76.5
+      "duration_ms": 58.3
     },
     {
       "id": "V-TPL-14",
@@ -1402,7 +1402,7 @@
         ],
         "conflict": "种子冲突：code-review@1.0.0 已存在且内容不同，拒绝覆盖"
       },
-      "duration_ms": 112.5
+      "duration_ms": 167.0
     }
   ]
 }

@@ -1,7 +1,7 @@
 # LLM Gateway 开发提示词
 ## 0. 角色与目标
 
-你是资深 Python 后端工程师，要独立完成一个 LLM Gateway（大模型网关）。网关对外只暴露一个统一入口，对内通过适配器模式调用两个不同协议的上游：
+你是资深 Python 后端工程师，要完成一个 LLM Gateway（大模型网关）。网关对外只暴露一个统一入口，对内通过适配器模式调用两个不同协议的上游：
 
 - deepseek-v4-pro → OpenAI Responses API
 - deepseek-v4-flash → Anthropic Messages API
@@ -33,7 +33,7 @@
 
 **不做（显式非目标，不要自行扩展）**：工具调用 / function calling、多模态、会话与 previous\_response\_id、WebSocket、动态路由与自动降级（fallback）、多租户与计费账单、前端页面。
 
-不做降级的理由（课程要点）：降级模型必须在上下文长度、结构化输出、工具调用等能力上与原模型等价；pro 与 flash 能力不等价，盲目切换既不能修复拒答、截断、格式错误，还会掩盖根因。请只保留扩展点：Router.resolve() 返回 RouteDecision（含选择原因），今后加降级时不用改调用方。
+不做降级的理由：降级模型必须在上下文长度、结构化输出、工具调用等能力上与原模型等价；pro 与 flash 能力不等价，盲目切换既不能修复拒答、截断、格式错误，还会掩盖根因。请只保留扩展点：Router.resolve() 返回 RouteDecision（含选择原因），今后加降级时不用改调用方。
 
 ## 3. 架构原则
 
